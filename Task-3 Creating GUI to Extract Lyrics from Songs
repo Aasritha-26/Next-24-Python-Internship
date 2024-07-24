@@ -1,0 +1,63 @@
+'''Task 3: Creating GUI to Extract Lyrics from Songs Using Python: Your final task is to design a graphical user
+interface (GUI) application that can extract lyrics from songs using Python. You will integrate APIs 
+or web scraping techniques to fetch lyrics and display them on the interface.'''
+
+import tkinter as tk
+from tkinter import scrolledtext
+import requests
+
+class LyricsApp:
+    def _init_(self, root):
+        self.root = root
+        self.root.title("Lyrics Extractor")
+
+        # Song title input
+        tk.Label(root, text="Song Title:").grid(row=0, column=0, padx=10, pady=10)
+        self.song_entry = tk.Entry(root, width=50)
+        self.song_entry.grid(row=0, column=1, padx=10, pady=10)
+
+        # Artist input
+        tk.Label(root, text="Artist:").grid(row=1, column=0, padx=10, pady=10)
+        self.artist_entry = tk.Entry(root, width=50)
+        self.artist_entry.grid(row=1, column=1, padx=10, pady=10)
+
+        # Fetch lyrics button
+        self.fetch_button = tk.Button(root, text="Fetch Lyrics", command=self.fetch_lyrics)
+        self.fetch_button.grid(row=2, columnspan=2, pady=10)
+
+        # Lyrics display area
+        self.lyrics_display = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=20, width=60, state='disabled')
+        self.lyrics_display.grid(row=3, columnspan=2, padx=10, pady=10)
+
+    def fetch_lyrics(self):
+        song_title = self.song_entry.get().strip()
+        artist = self.artist_entry.get().strip()
+
+        if not song_title or not artist:
+            self.update_display("Please enter both song title and artist.")
+            return
+
+        lyrics = self.get_lyrics(song_title, artist)
+        if lyrics:
+            self.update_display(lyrics)
+        else:
+            self.update_display("Lyrics not found.")
+
+    def get_lyrics(self, song_title, artist):
+        api_url = f"https://api.lyrics.ovh/v1/{artist}/{song_title}"
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            return data.get("lyrics", None)
+        return None
+
+    def update_display(self, text):
+        self.lyrics_display.config(state='normal')
+        self.lyrics_display.delete(1.0, tk.END)
+        self.lyrics_display.insert(tk.END, text)
+        self.lyrics_display.config(state='disabled')
+
+if _name_ == "_main_":
+    root = tk.Tk()
+    app = LyricsApp(root)
+    root.mainloop()
