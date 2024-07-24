@@ -1,0 +1,65 @@
+'''Task 1: Simple Registration Form Using Tkinter in Python: 
+You will be responsible for creating a basic registration form using Tkinter library in Python. The form should include fields such as name, email, age, etc. 
+This task will help you grasp the fundamentals of GUI development.'''
+
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import ttk
+
+def submit_form():
+    first_name = first_name_entry.get()
+    last_name = last_name_entry.get()
+    email = email_entry.get()
+    contact_number=contact_entry.get()
+    age = age_entry.get()
+    gender=gender_combobox.get()
+
+    if not first_name or not email or not age or not last_name or not gender or not contact_number:
+        messagebox.showwarning("Validation Error", "All fields are required!")
+        return
+    
+    try:
+        age = int(age)
+    except ValueError:
+        messagebox.showwarning("Validation Error", "Age must be a number!")
+        return
+
+    # Display the entered information
+    messagebox.showinfo("Submitted", f"First Name: {first_name}\nLast Name: {last_name}\nEmail: {email}\nContact Number: {contact_number}\nAge: {age}\nGender: {gender}")
+
+# Create the main window
+root = tk.Tk()
+root.title("Registration Form")
+root.configure(bg="lightblue")
+
+# Create and place the labels and entries for the form fields
+tk.Label(root, text="First Name").grid(row=0, column=0, padx=10, pady=5)
+first_name_entry = tk.Entry(root)
+first_name_entry.grid(row=0, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Last Name").grid(row=1, column=0, padx=10, pady=5)
+last_name_entry = tk.Entry(root)
+last_name_entry.grid(row=1, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Email").grid(row=2, column=0, padx=10, pady=5)
+email_entry = tk.Entry(root)
+email_entry.grid(row=2, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Contact Number").grid(row=4, column=0, padx=10, pady=5)
+contact_entry = tk.Entry(root)
+contact_entry.grid(row=4, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Age").grid(row=5, column=0, padx=10, pady=5)
+age_entry = tk.Entry(root)
+age_entry.grid(row=5, column=1, padx=10, pady=5)
+
+tk.Label(root, text="Gender").grid(row=6, column=0, padx=10, pady=5)
+gender_var = tk.StringVar()
+gender_combobox = ttk.Combobox(root, textvariable=gender_var, values=["Male", "Female"], state="readonly")
+gender_combobox.set("Male") 
+gender_combobox.grid(row=6, column=1, padx=10, pady=5)
+
+submit_button = tk.Button(root, text="Submit", command=submit_form)
+submit_button.grid(row=7, columnspan=2, pady=10)
+
+root.mainloop()
