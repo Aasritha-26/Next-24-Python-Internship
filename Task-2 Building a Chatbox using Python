@@ -1,0 +1,45 @@
+'''Task 2: Building a Chatbot Using Python: Your next task involves building a chatbot using Python.
+You will explore various libraries and techniques to develop a responsive and interactive chatbot that can engage with users effectively.'''
+
+import re
+
+class SimpleChatbot:
+    def _init_(self):
+        self.greetings = ["hello", "hi", "hey", "hola"]
+        self.goodbyes = ["bye", "goodbye", "see you", "later"]
+        self.questions = {
+            "how are you": "I'm just a bot, but I'm doing great! How about you?",
+            "what is your name": "I am a simple chatbot created with Python."
+        }
+
+    def preprocess_input(self, user_input):
+        return re.sub(r'[^a-zA-Z\s]', '', user_input.lower()).strip()
+
+    def get_response(self, user_input):
+        user_input = self.preprocess_input(user_input)
+
+        if any(greet in user_input for greet in self.greetings):
+            return "Hello! How can I help you today?"
+
+        if any(bye in user_input for bye in self.goodbyes):
+            return "Goodbye! Have a nice day!"
+
+        for question in self.questions:
+            if question in user_input:
+                return self.questions[question]
+
+        return "I'm not sure how to respond to that. Can you ask something else?"
+
+    def start_chat(self):
+        print("Welcome to the SimpleChatbot! Type 'bye' to exit.")
+        while True:
+            user_input = input("You: ")
+            if user_input.lower() in self.goodbyes:
+                print("Chatbot: " + self.get_response(user_input))
+                break
+            else:
+                print("Chatbot: " + self.get_response(user_input))
+
+if _name_ == "_main_":
+    bot = SimpleChatbot()
+    bot.start_chat()
